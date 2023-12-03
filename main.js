@@ -1,38 +1,30 @@
-class BankAccount {
-    constructor(initialBalance) {
-        this.balance = initialBalance;
-    }
+document.querySelector('button').addEventListener('click', function updateWeather() {
+    const city = document.getElementById('city').value;
+    const apiKey = '493ba623ff6b083d1c8b27168384d90e';
+    const apiUrl = `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
 
-    getBalance() {
-        return this.balance;
-    }
+    fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('temperature').innerText = `Temperature: ${data.main.temp}°C`;
+            document.getElementById('pressure').innerText = `Pressure: ${data.main.pressure} hPa`;
+            document.getElementById('description').innerText = `Description: ${data.weather[0].description}`;
+            document.getElementById('humidity').innerText = `Humidity: ${data.main.humidity}%`;
+            document.getElementById('wind').innerText = `Wind Speed: ${data.wind.speed} m/s, Direction: ${data.wind.deg}°`;
 
-    deposit(amount) {
-        if (amount > 0) {
-            this.balance += amount;
-            console.log(`Ваш баланс ${amount} гривень. Новий баланс: ${this.balance} гривень`);
-        } else {
-            console.log('Недійсна сума депозиту. Будь ласка, внесіть позитивну суму.');
-        }
-    }
+            const iconUrl = `http://openweathermap.org/img/w/${data.weather[0].icon}.png`;
+            document.getElementById('icon').src = iconUrl;
 
-    withdraw(amount) {
-        if (amount > 0 && amount <= this.balance) {
-            this.balance -= amount;
-            console.log(`Знято ${amount} гривень. Новий баланс: ${this.balance} гривень`);
-        } else if (amount > this.balance) {
-            console.log('Недостатньо коштів. Не можна зняти.');
-        } else {
-            console.log('Недійсна сума зняття. Будь ласка, зніміть позитивну суму.');
-        }
-    }
-}
+            const currentDate = new Date();
+            const lastUpdate = `Last Update: ${currentDate.toLocaleString()}`;
+            document.getElementById('last-update').innerText = lastUpdate;
+        })
+        .catch(error => console.error('Error fetching weather data:', error));
 
-const account1 = new BankAccount(1000);
-console.log(account1.getBalance()); // 1000
+})
 
-account1.deposit(500);
-console.log(account1.getBalance()); // 1500
 
-account1.withdraw(200);
-console.log(account1.getBalance()); // 1300
+
+
+
+
